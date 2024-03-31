@@ -1,0 +1,15 @@
+version: '1.0'
+services:
+  exchanger-db:
+    image: postgres:16-alpine
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=exchanger-db-pass
+      - POSTGRES_USER=exchanger
+      - POSTGRES_DB=exchanger
+
+volumes:
+  pg_data:

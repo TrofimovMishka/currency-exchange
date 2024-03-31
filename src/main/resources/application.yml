@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: exchanger
+  datasource:
+    url: jdbc:postgresql://localhost:5432/exchanger
+    username: exchanger
+    password: exchanger-db-pass
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    hibernate:
+      ddl: none
+      format_sql: true
