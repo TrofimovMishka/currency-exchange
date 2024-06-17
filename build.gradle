@@ -1,28 +1,67 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.2.4'
-	id 'io.spring.dependency-management' version '1.1.4'
+    id 'java'
+    id 'org.springframework.boot' version '3.2.4'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id "org.openapi.generator" version "7.4.0"
 }
 
 group = 'org.brosers.exchanger'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '21'
+    sourceCompatibility = '21'
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 //	implementation 'org.liquibase:liquibase-core'
-	runtimeOnly 'org.postgresql:postgresql'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    runtimeOnly 'org.postgresql:postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.openapitools:openapi-generator-gradle-plugin:7.4.0'
+    implementation "io.swagger.core.v3:swagger-annotations:2.2.21"
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+//    implementation 'io.swagger:swagger-annotations:2.0.0-rc2'
+//    implementation 'io.swagger:swagger-annotations:1.6.14'
+
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
+}
+
+openApiValidate {
+    inputSpec = "$rootDir/src/main/resources/openapi/openapi.yml".toString()
+    recommend = true
+}
+
+openApiGenerate {
+    generatorName = "spring"
+    inputSpec = "$rootDir/src/main/resources/openapi/openapi.yml".toString()
+    outputDir = "$rootDir/src/main/java/org/brosers/exchanger/openapi".toString()
+    apiPackage = "api"
+    invokerPackage = "invoker"
+    modelPackage = "model"
+    configOptions = [
+            dateLibrary: "java8",
+            useSpringBoot3: "true",
+            useJakartaEe: "true"
+    ]
+}
+
+// With compileJava also run generation for sources
+tasks.named('compileJava') {
+    dependsOn tasks.named('openApiValidate')
+    dependsOn tasks.named('openApiGenerate')
+}
+
+// Run generation for new sources if any changes occurs
+tasks.named('openApiGenerate') {
+    inputs.file("$rootDir/src/main/resources/openapi/openapi.yml") // Define input file as input for task
+    outputs.dir("$rootDir/build/generated/sources/openapi/src/main/java") // Define output directory as output for task
 }

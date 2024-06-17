@@ -3,7 +3,6 @@ package org.brosers.exchanger;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
 class ExchangerApplicationTests {
 
 	@Test

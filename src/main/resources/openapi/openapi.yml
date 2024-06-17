@@ -1,0 +1,4131 @@
+openapi: 3.0.2
+info:
+  title: EY Mediator
+  version: 0.1.7.17
+  description: >-
+    EY Mediator BFF REST APIs for mediation and negotiation workflow process
+    handling
+
+    Release notes:
+    - Dictionaries added (REST and structure)
+  contact:
+    name: Bartosz Olcha
+    email: bartosz.olcha1@pl.ey.com
+paths:
+  /case:
+    summary: Path used to save CaseData.
+    description: >-
+      The REST endpoint/path used to post single instances of a `CaseData`.
+    post:
+      requestBody:
+        description: A new `CaseData` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaseData'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaseData'
+          description: Successful response - returns a single `CaseData`.
+      operationId: createCaseData
+      summary: Create a CaseData
+      description: Create the details of a single instance of a `CaseData`.
+  /case/{caseId}/reopen:
+    summary: Path used to reopen case.
+    description: >-
+      The REST endpoint/path used to reopen Case.
+    post:
+      responses:
+        '201':
+          description: Successful response.
+      operationId: reopenCase
+      summary: Reopen a Case
+      description: Reopen a `Case`.
+    parameters:
+      - name: caseId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/reopen/validate:
+    summary: Path used to validate date.
+    description: The REST endpoint used to to validate reopen Case.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+          description: Validate reopen a `Case`.
+      operationId: reopenValidate
+      summary: Validate reopen a Case
+      description: Validate reopen a `Case`.
+    parameters:
+      - name: caseId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/calculation:
+    summary: Path used to manage the list of calculations.
+    description: >-
+      The REST endpoint/path used to list and create zero or more `Calculation`
+      entities.  This path contains a `GET` and `POST` operation to perform the
+      list and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationSummary'
+          description: Successful response - returns a single `Calculation` entity.
+      operationId: getCalculation
+      summary: Single Calculation
+      description: Gets a single `Calculation` entity.
+    post:
+      requestBody:
+        description: A new `Calculation` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculationSummary'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationSummary'
+          description: Successful response.
+      operationId: createCalculation
+      summary: Create a Calculation
+      description: Creates a new instance of a `Calculation`.
+    parameters:
+      - name: caseId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/calculation/{calculationId}:
+    summary: Path used to manage the credit decision.
+    description: >-
+      The REST endpoint/path used to get and update `CalculationSummary` entity.
+      This path contains a `GET` and `PUT` operation to perform the
+      get and update tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationSummary'
+          description: Successful response - returns a single `CalculationSummary` entity.
+      operationId: getCalculationById
+      summary: Single CalculationSummary
+      description: Gets a single `CalculationSummary` entity.
+    put:
+      requestBody:
+        description: Updated `CalculationSummary` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculationSummary'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationSummary'
+          description: Successful response.
+      operationId: updateCalculation
+      summary: Update a CalculationSummary
+      description: Updates an existing `CalculationSummary`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteCalculation
+      summary: Delete a CalculationSummary
+      description: Deletes an existing `CalculationSummary`.
+    parameters:
+      - name: caseId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+      - name: calculationId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/calculation/{calculationId}/negotiation-limits:
+    summary: Path used to manage the list of negotiationlimits.
+    description: >-
+      The REST endpoint/path used to list and create zero or more
+      `NegotiationLimit` entities.  This path contains a `GET` and `POST`
+      operation to perform the list and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NegotiationLimit'
+          description: >-
+            Successful response - returns an array of `NegotiationLimit`
+            entities.
+      operationId: getNegotiationLimits
+      summary: List All NegotiationLimits
+      description: Gets a list of all `NegotiationLimit` entities.
+    post:
+      requestBody:
+        description: A new `NegotiationLimit` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NegotiationLimit'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NegotiationLimit'
+          description: Successful response.
+      operationId: createNegotiationLimit
+      summary: Create a NegotiationLimit
+      description: Creates a new instance of a `NegotiationLimit`.
+    parameters:
+      - name: caseId
+        schema:
+          type: string
+        in: path
+        required: true
+      - name: calculationId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/credit-decisions:
+    summary: Path used to manage the credit decision.
+    description: >-
+      The REST endpoint/path used to create `Credit decision` entity.
+      This path contains a `POST` operation to perform the get and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditDecision'
+          description: Successful response - returns a single `CreditDecision` entity.
+      operationId: getCreditDecisionByCase
+      summary: Single CreditDecision
+      description: Gets a single `CreditDecision` entity.
+    post:
+      requestBody:
+        description: A new `CreditDecision` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditDecision'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditDecision'
+          description: Successful response.
+      operationId: createCreditDecision
+      summary: Create a CreditDecision
+      description: Creates a new instance of a `CreditDecision`.
+    parameters:
+      - name: caseId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/credit-decisions/{creditDecisionId}:
+    summary: Path used to manage the credit decision.
+    description: >-
+      The REST endpoint/path used to get and update `Credit decision` entity.
+      This path contains a `GET` and `PUT` operation to perform the
+      get and update tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditDecision'
+          description: Successful response - returns a single `CreditDecision` entity.
+      operationId: getCreditDecision
+      summary: Single CreditDecision
+      description: Gets a single `CreditDecision` entity.
+    put:
+      requestBody:
+        description: Updated `CreditDecision` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditDecision'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditDecision'
+          description: Successful response.
+      operationId: updateCreditDecision
+      summary: Update a CreditDecision
+      description: Updates an existing `CreditDecision`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteCreditDecision
+      summary: Delete a CreditDecision
+      description: Deletes an existing `CreditDecision`.
+    parameters:
+      - name: caseId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+      - name: creditDecisionId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/credit-decisions/{creditDecisionId}/decision-events:
+    summary: Path used to manage the list of CreditDecisionEvents.
+    description: >-
+      The REST endpoint/path used to list and create zero or more
+      `CreditDecisionEvent` entities.  This path contains a `GET` and `POST`
+      operation to perform the list and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreditDecisionEvent'
+          description: >-
+            Successful response - returns an array of `CreditDecisionEvent`
+            entities.
+      operationId: getCreditDecisionEvents
+      summary: List All CreditDecisionEvents
+      description: Gets a list of all `CreditDecisionEvent` entities.
+    post:
+      requestBody:
+        description: A new `CreditDecisionEvent` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditDecisionEvent'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditDecisionEvent'
+          description: Successful response.
+      operationId: createCreditDecisionEvent
+      summary: Create a CreditDecisionEvent
+      description: Creates a new instance of a `CreditDecisionEvent`.
+    parameters:
+      - name: caseId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+      - name: creditDecisionId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/credit-decisions/{creditDecisionId}/decision-events/{decisionEventId}:
+    summary: Path used to manage a single CreditDecisionEvent.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of
+      an `CreditDecisionEvent`.  This path contains `GET`, `PUT`, and `DELETE`
+      operations used to perform the get, update, and delete tasks,
+      respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditDecisionEvent'
+          description: Successful response - returns a single `CreditDecisionEvent`.
+      operationId: getCreditDecisionEvent
+      summary: Get a CreditDecisionEvent
+      description: Gets the details of a single instance of a `CreditDecisionEvent`.
+    put:
+      requestBody:
+        description: Updated `CreditDecisionEvent` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditDecisionEvent'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditDecisionEvent'
+          description: Successful response.
+      operationId: updateCreditDecisionEvent
+      summary: Update a CreditDecisionEvent
+      description: Updates an existing `CreditDecisionEvent`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteCreditDecisionEvent
+      summary: Delete a CreditDecisionEvent
+      description: Deletes an existing `CreditDecisionEvent`.
+    parameters:
+      - name: caseId
+        description: A unique identifier for a `CreditDecisionEvent`.
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+      - name: creditDecisionId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+      - name: decisionEventId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/case-mediator:
+    summary: Path used to manage the case mediators.
+    description: >-
+      The REST endpoint/path used create a new `CaseMediator`
+      entity. This path contains a `GET` and `POST` operation to perform the
+      list and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CaseMediator'
+          description: Successful response - returns an array of `CaseMediator` entities by caseId.
+      operationId: getAllCaseMediators
+      summary: List All CaseMediator
+      description: Gets a list of all `CaseMediator` entities.
+    post:
+      requestBody:
+        description: A new `CaseMediator` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaseMediator'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaseMediator'
+          description: Successful response.
+      operationId: createCaseMediator
+      summary: Create a CaseMediator
+      description: Creates a new instance of a `CaseMediator`.
+    parameters:
+      - name: caseId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/knf-mediators:
+    summary: Path used to manage the case mediators.
+    description: >-
+      The REST endpoint/path used to get list of `KNFMediator`
+      entity. This path contains a `GET` operation to perform the list, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KnfMediator'
+          description: Successful response - returns an array of `KNFMediator` entities by caseId.
+      operationId: getKNFMediator
+      summary: List All KNFMediator
+      description: Gets a list of all `KNFMediator` entities.
+    parameters:
+      - name: caseId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/client-data:
+    summary: Path used to manage the list of clientdata.
+    description: >-
+      The REST endpoint/path used to list and create zero or more `ClientData`
+      entities.  This path contains a `GET` and `POST` operation to perform the
+      list and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientData'
+          description: Successful response - returns an array of `ClientData` entities.
+      operationId: getAllClientData
+      summary: List All ClientData
+      description: Gets a list of all `ClientData` entities.
+    post:
+      requestBody:
+        description: A new `ClientData` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientData'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientData'
+          description: Successful response.
+      operationId: createClientData
+      summary: Create a ClientData
+      description: Creates a new instance of a `ClientData`.
+    parameters:
+      - name: caseId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/client-interactions:
+    summary: Path used to manage the list of clientinteractions.
+    description: >-
+      The REST endpoint/path used to list and create zero or more
+      `ClientInteraction` entities.  This path contains a `GET` and `POST`
+      operation to perform the list and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInteractionSummary'
+          description: >-
+            Successful response - returns single of `ClientInteraction`
+            entitie by caseId.
+      operationId: getClientInteractions
+      summary: Get a ClientInteraction
+      description: Gets the details of a single instance of a `ClientInteraction` by caseId.
+    post:
+      requestBody:
+        description: A new `ClientInteraction` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientInteractionSummary'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInteractionSummary'
+          description: Successful response returning added ClientInteraction.
+      operationId: createClientInteraction
+      summary: Create a ClientInteraction
+      description: Creates a new instance of a `ClientInteraction`.
+    parameters:
+      - name: caseId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/court-hearing-meetings:
+    summary: Path used to manage the list of courthearingmeetings.
+    description: >-
+      The REST endpoint/path used to list and create zero or more
+      `CourtHearingMeeting` entities.  This path contains a `GET` and `POST`
+      operation to perform the list and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourtHearingMeeting'
+          description: >-
+            Successful response - returns an array of `CourtHearingMeeting`
+            entities.
+      operationId: getCourtHearingMeetings
+      summary: List All CourtHearingMeetings
+      description: Gets a list of all `CourtHearingMeeting` entities.
+    post:
+      requestBody:
+        description: A new `CourtHearingMeeting` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourtHearingMeeting'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourtHearingMeeting'
+          description: Successful response.
+      operationId: createCourtHearingMeeting
+      summary: Create a CourtHearingMeeting
+      description: Creates a new instance of a `CourtHearingMeeting`.
+    parameters:
+      - name: caseId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/credit-data:
+    summary: Path used to manage the list of creditdata.
+    description: >-
+      The REST endpoint/path used to list and create zero or more `CreditData`
+      entities.  This path contains a `GET` and `POST` operation to perform the
+      list and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreditData'
+          description: Successful response - returns an array of `CreditData` entities.
+      operationId: getAllCreditData
+      summary: List All CreditData
+      description: Gets a list of all `CreditData` entities.
+    post:
+      requestBody:
+        description: A new `CreditData` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditData'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditData'
+          description: Successful response.
+      operationId: createCreditData
+      summary: Create a CreditData
+      description: Creates a new instance of a `CreditData`.
+    parameters:
+      - name: caseId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/documentation-data:
+    summary: Path used to manage the documentations.
+    description: >-
+      The REST endpoint/path used create a new `DocumentationData`
+      entity. This path contains a `POST` operation to perform the
+      create tasks.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentationData'
+          description: Successful response - returns a single `DocumentationData`.
+      operationId: getDocumentationDataByCase
+      summary: Get a DocumentationData
+      description: Gets the details of a single instance of a `DocumentationData`.
+    post:
+      requestBody:
+        description: A new `DocumentationData` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentationData'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentationData'
+          description: Successful response.
+      operationId: createDocumentationData
+      summary: Create a DocumentationData
+      description: Creates a new instance of a `DocumentationData`.
+    parameters:
+      - name: caseId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/documentation-data/{documentationId}:
+    summary: Path used to manage a single DocumentationData.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of
+      an `DocumentationData`.  This path contains `GET`, `PUT`, and `DELETE`
+      operations used to perform the get, update, and delete tasks,
+      respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentationData'
+          description: Successful response - returns a single `DocumentationData`.
+      operationId: getDocumentationData
+      summary: Get a DocumentationData
+      description: Gets the details of a single instance of a `DocumentationData`.
+    put:
+      requestBody:
+        description: Updated `DocumentationData` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentationData'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentationData'
+          description: Successful response.
+      operationId: updateDocumentationData
+      summary: Update a DocumentationData
+      description: Updates an existing `DocumentationData`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteDocumentationData
+      summary: Delete a DocumentationData
+      description: Deletes an existing `DocumentationData`.
+    parameters:
+      - name: caseId
+        description: A unique identifier for a `DocumentationData`.
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+      - name: documentationId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/finalization-parameters:
+    summary: Path used to manage the finalizationparameters.
+    description: >-
+      The REST endpoint/path used to get and create zero or more
+      `FinalizationParameters` entity.  This path contains a `GET` and `POST`
+      operation to perform the get and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinalizationParameters'
+          description: >-
+            Successful response - returns an of `FinalizationParameters`
+            entities.
+      operationId: getAllFinalizationParameters
+      summary: Get FinalizationParameters
+      description: Gets a `FinalizationParameters` entity.
+    post:
+      requestBody:
+        description: A new `FinalizationParameters` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinalizationParameters'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinalizationParameters'
+          description: Successful response.
+      operationId: createFinalizationParameters
+      summary: Create a FinalizationParameters
+      description: Creates a new instance of a `FinalizationParameters`.
+    parameters:
+      - name: caseId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/knf-data:
+    summary: Path used to manage the list of knfdata.
+    description: >-
+      The REST endpoint/path used to get and create zero or more `KNFData`
+      entities.  This path contains a `GET` and `POST` operation to perform the
+      get and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KNFData'
+          description: Successful response - returns an of `KNFData` entity.
+      operationId: getAllKNFData
+      summary: KNFData
+      description: Gets a of `KNFData` entity.
+    post:
+      requestBody:
+        description: A new `KNFData` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KNFData'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KNFData'
+          description: Successful response.
+      operationId: createKNFData
+      summary: Create a KNFData
+      description: Creates a new instance of a `KNFData`.
+    parameters:
+      - name: caseId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/mediation-outcomes:
+    summary: Path used to manage the list of mediationoutcomes.
+    description: >-
+      The REST endpoint/path used to get and create zero or more
+      `MediationOutcome` entities.  This path contains a `GET` and `POST`
+      operation to perform the get and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediationOutcome'
+          description: >-
+            Successful response - returns an array of `MediationOutcome`
+            entities.
+      operationId: getMediationOutcomes
+      summary: Get MediationOutcomes
+      description: Gets a  `MediationOutcome` entity.
+    post:
+      requestBody:
+        description: A new `MediationOutcome` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MediationOutcome'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediationOutcome'
+          description: Successful response.
+      operationId: createMediationOutcome
+      summary: Create a MediationOutcome
+      description: Creates a new instance of a `MediationOutcome`.
+    parameters:
+      - name: caseId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case-brief/:
+    summary: Path used to list case brief data CaseDataBrief
+    description: >-
+      The REST endpoint/path used to list and create zero or more
+      `CaseDataBrief` entities.  Pagination, filtering and sorting capability to
+      be added (frontend and backend cooperation -> PageableRepository in
+      Spring). This path contains a `GET` and `POST` operation to perform the
+      list and create tasks, respectively.
+    post:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CaseDataBrief'
+          description: Successful response - returns an array of `CaseDataBrief` entities.
+      operationId: getCaseDataBrief
+      summary: List All CaseDataBrief
+      description: Gets a list of all `CaseDataBrief` entities.
+  /case/{caseId}/organization-attorneys:
+    summary: Path used to manage the list of organizationattorneys.
+    description: >-
+      The REST endpoint/path used to list and create zero or more
+      `OrganizationAttorney` entities.  This path contains a `GET` and `POST`
+      operation to perform the list and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationAttorney'
+          description: >-
+            Successful response - returns an array of `OrganizationAttorney`
+            entities.
+      operationId: getOrganizationAttorneys
+      summary: List All OrganizationAttorneys
+      description: Gets a list of all `OrganizationAttorney` entities.
+    post:
+      requestBody:
+        description: A new `OrganizationAttorney` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationAttorney'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationAttorney'
+          description: Successful response.
+      operationId: createOrganizationAttorney
+      summary: Create a OrganizationAttorney
+      description: Creates a new instance of a `OrganizationAttorney`.
+    parameters:
+      - name: caseId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/organization-attorneys/list:
+    summary: Path used to manage the list of organizationattorneys.
+    description: >-
+      The REST endpoint/path used to list and create zero or more
+      `OrganizationAttorney` entities.  This path contains a `GET` and `POST`
+      operation to perform the list and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationAttorney'
+          description: >-
+            Successful response - returns an array of `OrganizationAttorney`
+            entities.
+      operationId: getAllOrganizationAttorneysForCase
+      summary: List All OrganizationAttorneys
+      description: Gets a list of all `OrganizationAttorney` entities for case.
+    parameters:
+      - name: caseId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/organization-attorneys/list:
+    summary: Path used to get list of organization attorneys
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationAttorney'
+          description: >-
+            Successful response - returns an array of `OrganizationAttorney`
+            entities.
+      operationId: getAllOrganizationAttorneys
+      summary: List All OrganizationAttorneys
+      description: Gets a list of all `OrganizationAttorney` entities.
+  /case/{caseId}/attachments:
+    summary: Path used to manage the list of attachments.
+    description: >-
+      The REST endpoint/path used to list and create zero or more `Attachment`
+      entities.  This path contains a `GET` and `POST` operation to perform the
+      list and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Attachment'
+          description: Successful response - returns an array of `Attachment` entities.
+      operationId: getAttachments
+      summary: List All Attachments
+      description: Gets a list of all `Attachment` entities.
+    post:
+      requestBody:
+        description: A new `Attachment` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+        required: true
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+      operationId: createAttachment
+      summary: Create a Attachment
+      description: Creates a new instance of a `Attachment`.
+    parameters:
+      - name: caseId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/attachments/{attachmentId}/binary:
+    summary: Path used to manage the list of attachment binary content
+    description: >-
+      The REST endpoint/path used to download, upload or delete attachment
+      binary. This path contains a `GET` and `POST` operation to perform the
+      list and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachmentBinary'
+          description: Successful response - returns an attachment binary content
+      operationId: getAttachmentBinaries
+      summary: Retrieve attachment binary content
+      description: Gets an attachment binary content
+    post:
+      requestBody:
+        description: A new attachment binary content to be uploaded
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+        required: true
+      responses:
+        '201':
+          description: Successful response.
+      operationId: createAttachmentBinary
+      summary: Uploads attachment binary content
+      description: Uploads attachment binary content
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteAttachmentBinary
+      summary: Delete vbinary content for an attachment
+      description: Deletes an existing binary content for an attachment
+    parameters:
+      - name: caseId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+      - name: attachmentId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/notes:
+    summary: Path used to manage the list of notes.
+    description: >-
+      The REST endpoint/path used to list and create zero or more `Note`
+      entities.  This path contains a `GET` and `POST` operation to perform the
+      list and create tasks, respectively.
+    get:
+      parameters:
+        - name: section
+          in: query
+          description: Section of the note
+          required: false
+          schema:
+            $ref: '#/components/schemas/NoteSectionEnum'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Note'
+          description: Successful response - returns an array of `Note` entities.
+      operationId: getNotes
+      summary: List All Notes
+      description: Gets a list of all `Note` entities.
+    post:
+      requestBody:
+        description: A new `Note` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Note'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+          description: Successful response.
+      operationId: createNote
+      summary: Create a Note
+      description: Creates a new instance of a `Note`.
+    parameters:
+      - name: caseId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}:
+    summary: Path used to manage a single CaseData.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of
+      an `CaseData`.  This path contains `GET`, `PUT`, and `DELETE` operations
+      used to perform the get, update, and delete tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaseData'
+          description: Successful response - returns a single `CaseData`.
+      operationId: getCaseData
+      summary: Get a CaseData
+      description: Gets the details of a single instance of a `CaseData`.
+    put:
+      requestBody:
+        description: Updated `CaseData` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaseData'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaseData'
+          description: Successful response.
+      operationId: updateCaseData
+      summary: Update a CaseData
+      description: Updates an existing `CaseData`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteCaseData
+      summary: Delete a CaseData
+      description: Deletes an existing `CaseData`.
+    parameters:
+      - name: caseId
+        description: A unique identifier for a `CaseData`.
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/attachments/{attachmentId}:
+    summary: Path used to manage a single Attachment.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of
+      an `Attachment`.  This path contains `GET`, `PUT`, and `DELETE` operations
+      used to perform the get, update, and delete tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+          description: Successful response - returns a single `Attachment`.
+      operationId: getAttachment
+      summary: Get a Attachment
+      description: Gets the details of a single instance of a `Attachment`.
+    put:
+      requestBody:
+        description: Updated `Attachment` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+        required: true
+      responses:
+        '202':
+          description: Successful response.
+      operationId: updateAttachment
+      summary: Update a Attachment
+      description: Updates an existing `Attachment`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteAttachment
+      summary: Delete a Attachment. Also deletes the binary
+      description: Deletes an existing `Attachment`.
+    parameters:
+      - name: caseId
+        description: A unique identifier for a `Attachment`.
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+      - name: attachmentId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/calculation/{calculationId}/negotiation-limits/{negotiationlimitId}:
+    summary: Path used to manage a single NegotiationLimit.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of
+      an `NegotiationLimit`.  This path contains `GET`, `PUT`, and `DELETE`
+      operations used to perform the get, update, and delete tasks,
+      respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NegotiationLimit'
+          description: Successful response - returns a single `NegotiationLimit`.
+      operationId: getNegotiationLimit
+      summary: Get a NegotiationLimit
+      description: Gets the details of a single instance of a `NegotiationLimit`.
+    put:
+      requestBody:
+        description: Updated `NegotiationLimit` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NegotiationLimit'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NegotiationLimit'
+          description: Successful response.
+      operationId: updateNegotiationLimit
+      summary: Update a NegotiationLimit
+      description: Updates an existing `NegotiationLimit`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteNegotiationLimit
+      summary: Delete a NegotiationLimit
+      description: Deletes an existing `NegotiationLimit`.
+    parameters:
+      - name: caseId
+        description: A unique identifier for a `NegotiationLimit`.
+        schema:
+          type: string
+        in: path
+        required: true
+      - name: calculationId
+        schema:
+          type: string
+        in: path
+        required: true
+      - name: negotiationlimitId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/case-mediator/{caseMediatorId}:
+    summary: Path used to manage a single CaseMediator.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of
+      a `CaseMediator`.  This path contains `GET`
+      operation used to perform the get task.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaseMediator'
+          description: Successful response - returns a single `CaseMediator`.
+      operationId: getCaseMediator
+      summary: Get a CaseMediator
+      description: Gets the details of a single instance of a `CaseMediator`.
+    put:
+      requestBody:
+        description: Updated `CaseMediator` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaseMediator'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaseMediator'
+          description: Successful response.
+      operationId: updateCaseMediator
+      summary: Update a CaseMediator
+      description: Updates an existing `CaseMediator`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteCaseMediator
+      summary: Delete a CaseMediator
+      description: Deletes an existing `CaseMediator`.
+    parameters:
+      - name: caseId
+        description: A unique identifier of CaseId.
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+      - name: caseMediatorId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/client-data/{clientdataId}:
+    summary: Path used to manage a single ClientData.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of
+      an `ClientData`.  This path contains `GET`, `PUT`, and `DELETE` operations
+      used to perform the get, update, and delete tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientData'
+          description: Successful response - returns a single `ClientData`.
+      operationId: getClientData
+      summary: Get a ClientData
+      description: Gets the details of a single instance of a `ClientData`.
+    put:
+      requestBody:
+        description: Updated `ClientData` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientData'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientData'
+          description: Successful response.
+      operationId: updateClientData
+      summary: Update a ClientData
+      description: Updates an existing `ClientData`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteClientData
+      summary: Delete a ClientData
+      description: Deletes an existing `ClientData`.
+    parameters:
+      - name: caseId
+        description: A unique identifier for a `ClientData`.
+        schema:
+          type: string
+        in: path
+        required: true
+      - name: clientdataId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/client-interactions/{clientinteractionId}:
+    summary: Path used to manage a single ClientInteraction.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of
+      an `ClientInteraction`.  This path contains `GET`, `PUT`, and `DELETE`
+      operations used to perform the get, update, and delete tasks,
+      respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInteractionSummary'
+          description: Successful response - returns a single `ClientInteraction`.
+      operationId: getClientInteraction
+      summary: Get a ClientInteraction
+      description: Gets the details of a single instance of a `ClientInteraction`.
+    put:
+      requestBody:
+        description: Updated `ClientInteraction` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientInteractionSummary'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInteractionSummary'
+          description: Successful response.
+      operationId: updateClientInteraction
+      summary: Update a ClientInteraction
+      description: Updates an existing `ClientInteraction`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteClientInteraction
+      summary: Delete a ClientInteraction
+      description: Deletes an existing `ClientInteraction`.
+    parameters:
+      - name: caseId
+        description: A unique identifier for a `ClientInteraction`.
+        schema:
+          type: string
+        in: path
+        required: true
+      - name: clientinteractionId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/client-interactions/{clientinteractionId}/interaction-events:
+    summary: Path used to manage the list of ClientInteractionEvent.
+    description: >-
+      The REST endpoint/path used to list and create zero or more
+      `ClientInteractionEvent` entities.  This path contains a `GET` and `POST`
+      operation to perform the list and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientInteractionEvent'
+          description: >-
+            Successful response - returns an array of `ClientInteractionEvent`
+            entities.
+      operationId: getClientInteractionEvents
+      summary: List All ClientInteractionEvents
+      description: Gets a list of all `ClientInteractionEvents` entities.
+    post:
+      requestBody:
+        description: A new `ClientInteractionEvent` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientInteractionEvent'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInteractionEvent'
+          description: Successful response.
+      operationId: createClientInteractionEvent
+      summary: Create a ClientInteractionEvent
+      description: Creates a new instance of a `ClientInteractionEvent`.
+    parameters:
+      - name: caseId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+      - name: clientinteractionId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/client-interactions/{clientinteractionId}/interaction-events/{interactionEventId}:
+    summary: Path used to manage a single ClientInteractionEvent.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of
+      an `ClientInteractionEvent`.  This path contains `GET`, `PUT`, and `DELETE`
+      operations used to perform the get, update, and delete tasks,
+      respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInteractionEvent'
+          description: Successful response - returns a single `ClientInteractionEvent`.
+      operationId: getClientInteractionEvent
+      summary: Get a ClientInteractionEvent
+      description: Gets the details of a single instance of a `ClientInteractionEvent`.
+    put:
+      requestBody:
+        description: Updated `ClientInteractionEvent` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientInteractionEvent'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInteractionEvent'
+          description: Successful response.
+      operationId: updateClientInteractionEvent
+      summary: Update a ClientInteractionEvent
+      description: Updates an existing `ClientInteractionEvent`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteClientInteractionEvent
+      summary: Delete a ClientInteractionEvent
+      description: Deletes an existing `ClientInteractionEvent`.
+    parameters:
+      - name: caseId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+      - name: clientinteractionId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+      - name: interactionEventId
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+  /case/{caseId}/court-hearing-meetings/{courthearingmeetingId}:
+    summary: Path used to manage a single CourtHearingMeeting.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of
+      an `CourtHearingMeeting`.  This path contains `GET`, `PUT`, and `DELETE`
+      operations used to perform the get, update, and delete tasks,
+      respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourtHearingMeeting'
+          description: Successful response - returns a single `CourtHearingMeeting`.
+      operationId: getCourtHearingMeeting
+      summary: Get a CourtHearingMeeting
+      description: Gets the details of a single instance of a `CourtHearingMeeting`.
+    put:
+      requestBody:
+        description: Updated `CourtHearingMeeting` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourtHearingMeeting'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourtHearingMeeting'
+          description: Successful response.
+      operationId: updateCourtHearingMeeting
+      summary: Update a CourtHearingMeeting
+      description: Updates an existing `CourtHearingMeeting`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteCourtHearingMeeting
+      summary: Delete a CourtHearingMeeting
+      description: Deletes an existing `CourtHearingMeeting`.
+    parameters:
+      - name: caseId
+        description: A unique identifier for a `CourtHearingMeeting`.
+        schema:
+          type: string
+        in: path
+        required: true
+      - name: courthearingmeetingId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/credit-data/{creditdataId}:
+    summary: Path used to manage a single CreditData.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of
+      an `CreditData`.  This path contains `GET`, `PUT`, and `DELETE` operations
+      used to perform the get, update, and delete tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditData'
+          description: Successful response - returns a single `CreditData`.
+      operationId: getCreditData
+      summary: Get a CreditData
+      description: Gets the details of a single instance of a `CreditData`.
+    put:
+      requestBody:
+        description: Updated `CreditData` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditData'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditData'
+          description: Successful response.
+      operationId: updateCreditData
+      summary: Update a CreditData
+      description: Updates an existing `CreditData`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteCreditData
+      summary: Delete a CreditData
+      description: Deletes an existing `CreditData`.
+    parameters:
+      - name: caseId
+        description: A unique identifier for a `CreditData`.
+        schema:
+          type: string
+        in: path
+        required: true
+      - name: creditdataId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/finalization-parameters/{finalizationparametersId}:
+    summary: Path used to manage a single FinalizationParameters.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of
+      an `FinalizationParameters`.  This path contains `GET`, `PUT`, and
+      `DELETE` operations used to perform the get, update, and delete tasks,
+      respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinalizationParameters'
+          description: Successful response - returns a single `FinalizationParameters`.
+      operationId: getFinalizationParameters
+      summary: Get a FinalizationParameters
+      description: Gets the details of a single instance of a `FinalizationParameters`.
+    put:
+      requestBody:
+        description: Updated `FinalizationParameters` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinalizationParameters'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinalizationParameters'
+          description: Successful response.
+      operationId: updateFinalizationParameters
+      summary: Update a FinalizationParameters
+      description: Updates an existing `FinalizationParameters`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteFinalizationParameters
+      summary: Delete a FinalizationParameters
+      description: Deletes an existing `FinalizationParameters`.
+    parameters:
+      - name: caseId
+        description: A unique identifier for a `FinalizationParameters`.
+        schema:
+          type: string
+        in: path
+        required: true
+      - name: finalizationparametersId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/knf-data/{knfdataId}:
+    summary: Path used to manage a single KNFData.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of
+      an `KNFData`.  This path contains `GET`, `PUT`, and `DELETE` operations
+      used to perform the get, update, and delete tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KNFData'
+          description: Successful response - returns a single `KNFData`.
+      operationId: getKNFData
+      summary: Get a KNFData
+      description: Gets the details of a single instance of a `KNFData`.
+    put:
+      requestBody:
+        description: Updated `KNFData` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KNFData'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KNFData'
+          description: Successful response.
+      operationId: updateKNFData
+      summary: Update a KNFData
+      description: Updates an existing `KNFData`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteKNFData
+      summary: Delete a KNFData
+      description: Deletes an existing `KNFData`.
+    parameters:
+      - name: caseId
+        description: A unique identifier for a `KNFData`.
+        schema:
+          type: string
+        in: path
+        required: true
+      - name: knfdataId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/mediation-outcomes/{mediationoutcomeId}:
+    summary: Path used to manage a single MediationOutcome.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of
+      an `MediationOutcome`.  This path contains `GET`, `PUT`, and `DELETE`
+      operations used to perform the get, update, and delete tasks,
+      respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediationOutcome'
+          description: Successful response - returns a single `MediationOutcome`.
+      operationId: getMediationOutcome
+      summary: Get a MediationOutcome
+      description: Gets the details of a single instance of a `MediationOutcome`.
+    put:
+      requestBody:
+        description: Updated `MediationOutcome` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MediationOutcome'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediationOutcome'
+          description: Successful response.
+      operationId: updateMediationOutcome
+      summary: Update a MediationOutcome
+      description: Updates an existing `MediationOutcome`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteMediationOutcome
+      summary: Delete a MediationOutcome
+      description: Deletes an existing `MediationOutcome`.
+    parameters:
+      - name: caseId
+        description: A unique identifier for a `MediationOutcome`.
+        schema:
+          type: string
+        in: path
+        required: true
+      - name: mediationoutcomeId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/organization-attorneys/{organizationattorneyId}:
+    summary: Path used to manage a single OrganizationAttorney.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of
+      an `OrganizationAttorney`.  This path contains `GET`, `PUT`, and `DELETE`
+      operations used to perform the get, update, and delete tasks,
+      respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationAttorney'
+          description: Successful response - returns a single `OrganizationAttorney`.
+      operationId: getOrganizationAttorney
+      summary: Get a OrganizationAttorney
+      description: Gets the details of a single instance of a `OrganizationAttorney`.
+    put:
+      requestBody:
+        description: Updated `OrganizationAttorney` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationAttorney'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationAttorney'
+          description: Successful response.
+      operationId: updateOrganizationAttorney
+      summary: Update a OrganizationAttorney
+      description: Updates an existing `OrganizationAttorney`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: deleteOrganizationAttorney
+      summary: Delete a OrganizationAttorney
+      description: Deletes an existing `OrganizationAttorney`.
+    parameters:
+      - name: caseId
+        description: A unique identifier for a `OrganizationAttorney`.
+        schema:
+          type: string
+        in: path
+        required: true
+      - name: organizationattorneyId
+        schema:
+          type: string
+        in: path
+        required: true
+  /case/{caseId}/history:
+    get:
+      parameters:
+        - name: caseId
+          description: identyfikator sprawy wewnatrz Mediator
+          schema:
+            type: integer
+            format: int64
+          in: path
+          required: true
+      responses:
+        '200':
+          description: Successfull response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CaseDataRevision'
+      operationId: getCaseHistory
+      summary: Load case history
+  /case/{caseId}/listOfAvailableParticipants:
+    summary: Path used to get list of available participants to court meetings
+    description: Join from client data, organization_attorneys and knf_mediators to one list of person
+    get:
+      parameters:
+        - name: caseId
+          description: identyfikator sprawy wewnatrz Mediator
+          schema:
+            type: integer
+            format: int64
+          in: path
+          required: true
+      responses:
+        '200':
+          description: Successfully response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+      operationId: getListOfAvailableParticipants
+      summary: Get list of available participants to court meeting
+  /case/{caseId}/listOfClients:
+    summary: Path used to get list of clients (fullName)
+    description: ''
+    get:
+      parameters:
+        - name: caseId
+          description: identyfikator sprawy wewnatrz Mediator
+          schema:
+            type: integer
+            format: int64
+          in: path
+          required: true
+      responses:
+        '200':
+          description: Successfully response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+      operationId: getListOfClients
+      summary: Get list of clients from specified case
+
+  /dictionaries:
+    summary: Path used to manage the list of dictionaries.
+    description: >-
+      The REST endpoint/path used to list and create zero or more `Dictionary`
+      entities.  This path contains a `GET` and `POST` operation to perform the
+      list and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dictionary'
+          description: Successful response - returns an array of `Dictionary` entities.
+      operationId: getDictionaries
+      summary: List All Dictionaries
+      description: Gets a list of all `Dictionary` entities.
+  /register/import:
+    summary: Path used to send excel file with register to import
+    description: >-
+      The REST endpoint/path used to send excel file to import caseData.
+    post:
+      deprecated: true
+      requestBody:
+        description: A caseDate register to be imported
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+          description: Successful response.
+      operationId: importRegister
+      summary: Send excel file to import
+      description: Send excel file with caseData to import
+  /register/import-new:
+    summary: Path used to send excel file with register to import
+    description: >-
+      The REST endpoint/path used to send excel file to import caseData.
+    post:
+      requestBody:
+        description: A caseDate register to be imported
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+        required: true
+      responses:
+        '200':
+          description: Successful response
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportErrorResponse'
+          description: Error in import occurred
+      operationId: importRegisterNew
+      summary: Send excel file to import
+      description: Send excel file with caseData to import
+  /case/{caseId}/knfHistoryOperations:
+    summary: Path used to get history of knf operations to specific case
+    description: ''
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KnfHistoryOperation'
+          description: Successful response - returns an array of KnfHistoryOperations.
+      operationId: getHistoryKnfOperations
+      summary: List of knf operations for specific case.
+      description: Gets a list of KNF history operations for case.
+      parameters:
+        - name: caseId
+          schema:
+            type: integer
+            format: int64
+          in: path
+          required: true
+
+
+security:
+  - bearerAuth: [ ]
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ImportErrorResponse:
+      description: Excel import error with list of problems
+      type: object
+      properties:
+        message:
+          type: string
+        errorList:
+          type: array
+          items:
+            $ref: '#/components/schemas/RowProcessingError'
+    RowProcessingError:
+      description: Import error description
+      type: object
+      properties:
+        line:
+          type: integer
+          format: int64
+        message:
+          type: string
+    LabelValue:
+      description: |-
+        LabelValue tuple
+
+        org.javatuples.javatuples
+      required:
+        - label
+        - value
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        label:
+          description: UI displayable name
+          type: string
+        value:
+          description: >-
+            technical value as understood by the backend, not to be displayed to
+            end user
+          type: string
+    CaseData:
+      description: Dane Sprawy
+      required:
+        - przypisanyUzytkownik
+        - typSprawy
+        - etapProcesu
+        - statusTechniczny
+        - dataRejestracji
+        - organisationId
+        - numerKontraktu
+        - numerUmowy
+        - umowaIndywidualna
+        - opisPrzedmiotuMediacji
+        - wartoscKredytu
+        - walutaKredytu
+        - sprawaPrzekazanaDoObslugiZewnetrznej
+        - inicjatorProcesu
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        przypisanyUzytkownik:
+          $ref: '#/components/schemas/LabelValue'
+          description: label - name, value - userId
+        typSprawy:
+          description: ''
+          enum:
+            - MEDIACJE
+          type: string
+        etapProcesu:
+          description: 'Default value: NOWA'
+          enum:
+            - NOWA
+            - W_ANALIZIE
+            - PO_DECYZJI
+            - DO_KONTAKTU_Z_KLIENTEM
+            - DECYZJA_NEGATYWNA_RYZYKA
+            - OCZEKUJE_NA_UMOWE_MEDIACYJNA
+            - BRAK_KONTAKTU
+            - ODMOWA_MEDIACJI
+            - ZAREJESTROWANA_W_KNF
+            - OCZEKUJE_NA_MEDIACJE_KALKULACJA
+            - OCZEKUJE_NA_MEDIACJE_DOKUMENTACJA
+            - OCZEKUJE_NA_MEDIACJE
+            - MEDIACJE
+            - DECYZJA_NEGOCJACYJNA_RBI
+            - OCZEKUJE_NA_KOLEJNE_SPOTKANIE
+            - BRAK_POROZUMIENIA
+            - MEDIACJA_ZAKONCZONA_NEGATYWNIE
+            - PRZYGOTOWYWANIE_UGODY_REKALKULACJA
+            - REZYGNACJA_KLIENTA_PO_MEDIACJI
+            - PRZYGOTOWYWANIE_UGODY
+            - DOKUMENTY_WYSLANE
+            - DOKUMENTY_OTRZYMANE
+            - DOKUMENTY_NIEKOMPLETNE
+            - DOKUMENTY_OTRZYMANE_KOMPLETNE
+            - DOKUMENTY_OTRZYMANE_DO_REKALKULACJI
+            - OCZEKUJE_NA_REALIZACJE
+            - UGODA_URUCHOMIONA_W_SYSTEMIE
+            - UGODA_URUCHOMIONA_W_SYSTEMIE_KONIEC_PROCESU
+            - BRAK_SPELNIENIA_WARUNKOW_PO_MEDIACJI
+            - ANULOWANA
+          type: string
+        statusTechniczny:
+          description: ''
+          enum:
+            - NOWA
+            - W_TRAKCIE_PRZETWARZANIA
+            - BLAD
+            - ANULOWANA
+            - ZAKONCZONA
+          type: string
+        dataRejestracji:
+          format: date-time
+          description: yyyy-MM-dd HH:mm:ss
+          type: string
+        godzinaRejestracji:
+          description: HH:mm:ss
+          type: string
+          pattern: '^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$'
+        organisationId:
+          description: identyfikator produktu_date (yyyy-MM-dd)
+          maxLength: 100
+          minLength: 0
+          type: string
+        numerKontraktu:
+          description: ''
+          maxLength: 20
+          minLength: 0
+          type: string
+        numerUmowy:
+          description: ''
+          maxLength: 30
+          minLength: 0
+          type: string
+        numerSprawy:
+          description: >-
+            Unikalny numer dyspozycji. ID klucz złożony (human readable) - nr
+            kontraktu_data rejstracji_numer kolejny sekwencji
+          maxLength: 300
+          minLength: 0
+          type: string
+        umowaIndywidualna:
+          description: ''
+          type: boolean
+        opisPrzedmiotuMediacji:
+          description: opis przedmiotu sporu
+          maxLength: 400
+          minLength: 0
+          type: string
+        wartoscKredytu:
+          description: wartosc sporu, tylko cyfry
+          maxLength: 20
+          minLength: 0
+          type: string
+        walutaKredytu:
+          description: waluta sporu
+          enum:
+            - CHF
+            - PLN
+          type: string
+        sprawaPrzekazanaDoObslugiZewnetrznej:
+          description: >-
+            Widok spraw przekazanych do EY tylko dla EY - brak wgladu w sprawy
+            Banku
+          type: boolean
+        inicjatorProcesu:
+          description: ''
+          enum:
+            - BANK
+            - KLIENT
+          type: string
+        wnioskujacyKlient:
+          description: Pole uzupełniane gdy inicjator procesu to klient
+          type: string
+        creditDataIds:
+          description: ''
+          type: array
+          items:
+            type: integer
+            format: int64
+        clientDataIds:
+          description: List of ClientData IDs
+          type: array
+          items:
+            type: integer
+            format: int64
+        clientInteractionSummaryId:
+          description: ''
+          type: integer
+          format: int64
+        calculationSummaryId:
+          description: ''
+          type: integer
+          format: int64
+        courtHearingMeetingsIds:
+          description: ''
+          type: array
+          items:
+            type: integer
+            format: int64
+        organizationAttorneyIds:
+          description: ''
+          type: array
+          items:
+            type: integer
+            format: int64
+        mediatorIds:
+          description: ''
+          type: array
+          items:
+            type: integer
+            format: int64
+        knfDataId:
+          description: ''
+          type: integer
+          format: int64
+        mediationOutcomeId:
+          description: ''
+          type: integer
+          format: int64
+        finalizationParametersId:
+          description: ''
+          type: integer
+          format: int64
+        notatkiIds:
+          description: Ids of Note entities related to Case
+          type: array
+          items:
+            type: integer
+            format: int64
+        documentationDataId:
+          description: ''
+          type: integer
+          format: int64
+        creditDecisionId:
+          description: ''
+          type: integer
+          format: int64
+        negotiationLimitIds:
+          description: List of NegotiationLimit IDs
+          type: array
+          items:
+            type: integer
+            format: int64
+        dataAktualizacjiStatusu:
+          format: date-time
+          description: Represents the date-time when state KOMPLETNY was sent to KNF
+          type: string
+        sprawaZmigrowana:
+          description: Represents the state, is case migrated or no
+          type: boolean
+        etapDoMigracji:
+          description: Represents the state of case, equals to the etapProcesu
+          $ref: '#/components/schemas/EtapProcesu'
+        reopenCaseHistory:
+          description: Reopen case history
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/ReopenCaseHistory'
+
+    CaseDataRevision:
+      properties:
+        type:
+          enum:
+            - UNKNOWN
+            - INSERT
+            - UPDATE
+            - DELETE
+        caseData:
+          $ref: '#/components/schemas/CaseDataHistory'
+    CaseDataHistory:
+      type: object
+      properties:
+        creatorId:
+          type: string
+        createDate:
+          format: date-time
+          description: yyyy-MM-dd HH:mm:ss
+          type: string
+        lastModifyUserId:
+          type: string
+        lastModifyChangeDate:
+          format: date-time
+          description: yyyy-MM-dd HH:mm:ss
+          type: string
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        przypisanyUzytkownik:
+          $ref: '#/components/schemas/LabelValue'
+        typSprawy:
+          description: ''
+          enum:
+            - MEDIACJE
+          type: string
+        etapProcesu:
+          description: 'Default value: NOWA'
+          enum:
+            - NOWA
+            - W_ANALIZIE
+            - PO_DECYZJI
+            - DO_KONTAKTU_Z_KLIENTEM
+            - DECYZJA_NEGATYWNA_RYZYKA
+            - OCZEKUJE_NA_UMOWE_MEDIACYJNA
+            - BRAK_KONTAKTU
+            - ODMOWA_MEDIACJI
+            - ZAREJESTROWANA_W_KNF
+            - OCZEKUJE_NA_MEDIACJE_KALKULACJA
+            - OCZEKUJE_NA_MEDIACJE_DOKUMENTACJA
+            - OCZEKUJE_NA_MEDIACJE
+            - MEDIACJE
+            - DECYZJA_NEGOCJACYJNA_RBI
+            - OCZEKUJE_NA_KOLEJNE_SPOTKANIE
+            - BRAK_POROZUMIENIA
+            - MEDIACJA_ZAKONCZONA_NEGATYWNIE
+            - PRZYGOTOWYWANIE_UGODY_REKALKULACJA
+            - REZYGNACJA_KLIENTA_PO_MEDIACJI
+            - PRZYGOTOWYWANIE_UGODY
+            - DOKUMENTY_WYSLANE
+            - DOKUMENTY_OTRZYMANE
+            - DOKUMENTY_NIEKOMPLETNE
+            - DOKUMENTY_OTRZYMANE_KOMPLETNE
+            - DOKUMENTY_OTRZYMANE_DO_REKALKULACJI
+            - OCZEKUJE_NA_REALIZACJE
+            - UGODA_URUCHOMIONA_W_SYSTEMIE
+            - UGODA_URUCHOMIONA_W_SYSTEMIE_KONIEC_PROCESU
+            - BRAK_SPELNIENIA_WARUNKOW_PO_MEDIACJI
+            - ANULOWANA
+          type: string
+        statusTechniczny:
+          description: ''
+          enum:
+            - NOWA
+            - W_TRAKCIE_PRZETWARZANIA
+            - BLAD
+            - ANULOWANA
+            - ZAKONCZONA
+          type: string
+        dataRejestracji:
+          format: date-time
+          description: yyyy-MM-dd HH:mm:ss
+          type: string
+        organisationId:
+          description: identyfikator produktu_date (yyyy-MM-dd)
+          type: string
+        numerKontraktu:
+          description: ''
+          type: string
+        numerUmowy:
+          description: ''
+          type: string
+        numerSprawy:
+          description: >-
+            Unikalny numer dyspozycji. ID klucz złożony (human readable) - nr
+            kontraktu_data rejstracji_numer kolejny sekwencji
+          type: string
+        umowaIndywidualna:
+          description: ''
+          type: boolean
+        opisPrzedmiotuMediacji:
+          description: opis przedmiotu sporu
+          type: string
+        wartoscKredytu:
+          description: wartosc sporu, tylko cyfry
+          type: string
+        walutaKredytu:
+          description: waluta sporu
+          enum:
+            - CHF
+            - PLN
+          type: string
+        sprawaPrzekazanaDoObslugiZewnetrznej:
+          description: >-
+            Widok spraw przekazanych do EY tylko dla EY - brak wgladu w sprawy
+            Banku
+          type: boolean
+        inicjatorProcesu:
+          description: ''
+          enum:
+            - BANK
+            - KLIENT
+          type: string
+        wnioskujacyKlient:
+          description: Pole uzupełniane gdy inicjator procesu to klient
+          type: string
+        creditDataEntities:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditData'
+        clientDataEntities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientData'
+        clientInteractionSummary:
+          $ref: '#/components/schemas/ClientInteractionSummary'
+        calculationSummary:
+          $ref: '#/components/schemas/CalculationSummary'
+        negotiationLimits:
+          type: array
+          items:
+            $ref: '#/components/schemas/NegotiationLimit'
+        courtHearingMeetings:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/CourtHearingMeeting'
+        attorneyEntities:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationAttorney'
+        caseMediators:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/CaseMediator'
+        knfData:
+          $ref: '#/components/schemas/KNFData'
+        mediationOutcome:
+          $ref: '#/components/schemas/MediationOutcome'
+        finalizationParameters:
+          $ref: '#/components/schemas/FinalizationParameters'
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+        noteEntities:
+          description: Ids of Note entities related to Case
+          type: array
+          items:
+            $ref: '#/components/schemas/Note'
+        documentationData:
+          $ref: '#/components/schemas/DocumentationData'
+        creditDecision:
+          $ref: '#/components/schemas/CreditDecision'
+        dataAktualizacjiStatusu:
+          format: date-time
+          description: Represents the date-time when state KOMPLETNY was sent to KNF
+          type: string
+        sprawaZmigrowana:
+          description: Represents the state, is case migrated or no
+          type: boolean
+        etapDoMigracji:
+          description: Represents the state of case, equals to the etapProcesu
+          $ref: '#/components/schemas/EtapProcesu'
+    ClientData:
+      description: >-
+        Dane Klienta
+        Wybór kredytobiorcy - przy zaczytaniu danych powinno się pojawić tylu
+        kredytobiorców co w pliku wgrywanym do sprawy
+      type: object
+      required:
+        - adresDoKnfUlica
+        - adresDoKnfNumerBudynku
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        idKlienta:
+          description: id klienta w systemach organizacji - nie w Mediatorze
+          maxLength: 15
+          minLength: 0
+          type: string
+        deleted:
+          description: czy encja usunieta
+          type: boolean
+        nazwaFirmy:
+          description: ''
+          maxLength: 100
+          minLength: 0
+          type: string
+        imie:
+          description: ''
+          maxLength: 20
+          minLength: 0
+          type: string
+        nazwisko:
+          description: ''
+          maxLength: 40
+          minLength: 0
+          type: string
+        nazwiskoPanienskieMatki:
+          description: ''
+          maxLength: 40
+          minLength: 0
+          type: string
+        dataUrodzenia:
+          format: date
+          description: wybor z kalendarza. yyyy-MM-dd
+          type: string
+        miejsceUrodzenia:
+          description: ''
+          maxLength: 30
+          minLength: 0
+          type: string
+        adresZamieszkaniaUlicaNrBudynkuOrazNrLokalu:
+          description: ''
+          maxLength: 50
+          minLength: 0
+          type: string
+        adresZamieszkaniaMiasto:
+          description: ''
+          maxLength: 30
+          minLength: 0
+          type: string
+        adresZamieszkaniaKodPocztowy:
+          description: ''
+          maxLength: 10
+          minLength: 0
+          type: string
+        adresZamieszkaniaKraj:
+          description: ''
+          maxLength: 20
+          minLength: 0
+          type: string
+        adresKorespondencyjnyUlicaNrBudynkuOrazNrLokalu:
+          description: ''
+          maxLength: 50
+          minLength: 0
+          type: string
+        adresKorespondencyjnyMiasto:
+          description: ''
+          maxLength: 30
+          minLength: 0
+          type: string
+        adresKorespondencyjnyKodPocztowy:
+          description: ''
+          maxLength: 10
+          minLength: 0
+          type: string
+        adresKorespondencyjnyKraj:
+          description: ''
+          maxLength: 20
+          minLength: 0
+          type: string
+        regon:
+          description: tylko cyfry
+          maxLength: 9
+          minLength: 0
+          type: string
+        pesel:
+          description: tylko cyfry
+          maxLength: 11
+          minLength: 0
+          type: string
+        rodzajDokumentuTozsamosci:
+          description: Do uzupelnienia w przypadku obcokrajowca
+          maxLength: 20
+          minLength: 0
+          type: string
+        numerISeriaDokumentu:
+          description: ''
+          maxLength: 50
+          minLength: 0
+          type: string
+        numerTelefonuKomorkowy:
+          description: cyfry oraz znak specjalny +
+          type: string
+          pattern: '^\+[0-9]{1,6} [0-9]{3,14}$'
+        numerTelefonuSluzbowy:
+          description: cyfry oraz znak specjalny +
+          type: string
+          pattern: '^\+[0-9]{1,6} [0-9]{3,14}$'
+        numerTelefonuStacjonarny:
+          description: cyfry oraz znak specjalny +
+          type: string
+          pattern: '^\+[0-9]{1,6} [0-9]{3,14}$'
+        adresMailowy:
+          description: ''
+          maxLength: 100
+          minLength: 0
+          type: string
+          pattern: '^$|^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$'
+        zgodaEmail:
+          description: checkbox
+          type: boolean
+        kredytobiorcaDoKontaktu:
+          description: checkbox
+          type: boolean
+        adresDoKnfUlica:
+          description: Ulica klienta, wysylany do KNF
+          maxLength: 100
+          minLength: 0
+          type: string
+        adresDoKnfNumerBudynku:
+          description: Numer budynku klienta, wysylany do KNF
+          maxLength: 50
+          minLength: 0
+          type: string
+        adresDoKnfNumerLocalu:
+          description: Numer localu klienta, wysylany do KNF
+          maxLength: 50
+          minLength: 0
+          type: string
+        adresDoKnfMiasto:
+          description: Miasto klienta, wysylany do KNF
+          maxLength: 50
+          minLength: 0
+          type: string
+        adresDoKnfKodPocztowy:
+          description: Kod pocztowy klienta, wysylany do KNF
+          maxLength: 10
+          minLength: 0
+          type: string
+        adresDoKnfKraj:
+          description: Kraj klienta, wysylany do KNF
+          maxLength: 50
+          minLength: 0
+          type: string
+        klientPodpisalOswiadczeniePit:
+          description: Czy podpisal klient oswiadczenie PIT
+          type: boolean
+    ClientInteractionSummary:
+      description: Kontakt z Klientem
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        dataWyslaniaOnePager:
+          format: date
+          description: >-
+            Wybor z kalendarza yyyy-MM-dd. Od tej daty będzie się liczył czas do
+            follow up
+          type: string
+        liczbaKontaktowZKlientemFirmaZewnetrzna:
+          description: zlicza automatycznie liczbe kontaktow w sekcji rozmowa
+          maxLength: 2
+          minLength: 0
+          type: string
+        liczbaProbKontaktuZKlientemFirmaZewnetrzna:
+          description: ''
+          maxLength: 2
+          minLength: 0
+          type: string
+        dataPozytywnejRozmowyZKlientemFirmaZewnetrzna:
+          format: date
+          description: Wybor z kalendarza yyyy-MM-dd
+          type: string
+        statusRozmowyZKlientemFirmaZewnetrzna:
+          description: ''
+          $ref: '#/components/schemas/InteractionStatusEnum'
+        statusDokumentacjiKlienta:
+          description: >-
+            w momencie odznaczenia miejsca w sekcji dokumentacja powinno w tym
+            polu pojawić się dokumentacja otrzymana, jeżeli nie ma zmiany w polu
+            sekcja dokumentacja pole pozostaje puste
+          maxLength: 1000
+          minLength: 0
+          type: string
+        liczbaKontaktowZKlientemRbi:
+          description: zlicza automatycznie liczbe kontaktow w sekcji rozmowa
+          maxLength: 2
+          minLength: 0
+          type: string
+        liczbaProbKontaktuZKlientemRbi:
+          description: ''
+          maxLength: 2
+          minLength: 0
+          type: string
+        dataPozytywnejRozmowyZKlientemRbi:
+          format: date
+          description: Wybor z kalendarza yyyy-MM-dd
+          type: string
+        statusRozmowyZKlientemRbi:
+          description: ''
+          $ref: '#/components/schemas/InteractionStatusEnum'
+        przyczynaOdmowy:
+          description: ''
+          enum:
+            - BRAK_ZAINTERESOWANIA_UGODA
+            - OFERTA_ZA_MALA_KWOTA_UMORZENIA
+            - OFERTA_CHCE_ROZLICZENIA_DO_KAPITALU
+            - OFERTA_MA_SWOJA_PROPOZYCJE
+            - POZEW
+            - NIE_MA_CZASU_ZASTANOWI_SIE
+          type: string
+        rozmowyIds:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientInteractionEvent'
+    InteractionStatusEnum:
+      description: "Enum dla statusu rozmow"
+      type: string
+      enum:
+        - W_TRAKCIE_PROB
+        - BRAK_KONTAKTU
+        - ODMOWA_MEDIACJI
+        - OCZEKUJE_NA_UMOWE_MEDIACYJNA
+        - ANULOWANO
+        - PRZESLANKA_NEGATYWNA
+    ClientInteractionEvent:
+      description: Sekcja rozmowa w ramach Kotaktu z Klientem (ClientInteractionSummary)
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        clientInteractionId:
+          description: identyfikator kontaktu z klientem wewnatrz Mediator
+          type: integer
+          format: int64
+        dataRozmowy:
+          format: date-time
+          description: wbor z kalendarza, yyyy-MM-dd HH:mm:ss
+          type: string
+        typPolaczenia:
+          description: ''
+          enum:
+            - WYCHODZACE
+            - PRZYCHODZACE
+            - SMS
+          type: string
+        rozmowca:
+          description: >-
+            pole wyboru ze zdefiniowanej listy. zdefiniowana lista powinna być
+            pobierana z encji dane kredytobiorców, pole Nazwa. jesli nie wybrano
+            z listy wyboru to mozna wpisac tresc recznie jako wolny input text
+          maxLength: 150
+          minLength: 2
+          type: string
+        doradca:
+          description: >-
+            automatyczne uzupełnienie po zalogowanym użytkowniku -> user
+            organizational id. wyswietlana jest nazwa z human rewadable czyli
+            imie i nazwisko. do backendu wysylany jest id
+          maxLength: 200
+          minLength: 2
+          type: string
+        statusKontaktu:
+          description: ''
+          enum:
+            - BRAK_KONTAKTU
+            - POCZTA_GLOSOWA
+            - KONTAKT_UDANY
+            - PONOWNY_KONTAKT
+            - ODMOWA_WERYFIKACJI
+            - KONTAKT_Z_OSOBA_TRZECIA
+            - NUMER_NIEAKTUALNY
+            - OSOBA_NIEDECYZYJNA
+            - ODMOWA_MEDIACJI
+          type: string
+        dataZaplanowanegoKontaktu:
+          format: date-time
+          description: mozliwosc wyboru z kalendarza, yyyy-MM-dd HH:mm:ss
+          type: string
+        notatkiPoRozmowie:
+          type: string
+          description: ''
+          maxLength: 5000
+
+    CreditData:
+      description: Dane Kredytu
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        numerKontraktu:
+          description: ''
+          maxLength: 30
+          minLength: 0
+          type: string
+        numerUmowy:
+          description: ''
+          maxLength: 30
+          minLength: 0
+          type: string
+        indeksowanyCzyDenominowany:
+          description: ''
+          enum:
+            - INDEKSOWANY
+            - DENOMINOWANY
+          type: string
+        walutaKredytu:
+          description: ''
+          enum:
+            - PLN
+            - CHF
+            - EUR
+            - GBP
+            - USD
+          type: string
+        statusUmowyKredytowej:
+          description: ''
+          enum:
+            - AKTYWNA
+            - SPLACONA
+            - PRZENIESIONA_POZA_BILANS
+            - SEKURYTYZACJA
+            - WYPOWIEDZIANA
+            - UNIEWAZNIONA
+            - SPISANA
+            - OGLOSZONA_UPADLOSC
+            - ZGON
+          type: string
+        formulaSplaty:
+          description: >-
+            lista z jedna wartoscia, tylko raty stale, automatycznie wybierana
+            jedna wartosc
+          enum:
+            - RATY_STALE
+            - RATY_ZMIENNE_ANNUITET
+          type: string
+        dzienPlatnosciRaty:
+          description: tylko cyfry
+          maxLength: 2
+          minLength: 0
+          type: string
+        dataZapadalnosciKredytu:
+          format: date
+          description: wybor z kalendarza, yyyy-MM-dd
+          type: string
+        dataDanychSekcji:
+          format: date
+          description: wybor z kalendarza, yyyy-MM-dd
+          type: string
+        kwotaWyplaconegoKredytuWPln:
+          description: >-
+            Format X XXX,XX tysiące oddzielone spacją znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+        aktualneSaldoZadluzeniaWWalucieChfKapital:
+          description: >-
+            Format X.XXX,XX tysiące oddzielone kropką znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          maxLength: 20
+          minLength: 0
+          type: string
+        aktualneSaldoZadluzaniaWPlnPrzeliczonePoKursieSrednimNbp:
+          description: >-
+            Format X.XXX,XX tysiące oddzielone kropką znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          maxLength: 20
+          minLength: 0
+          type: string
+        aktualnaWymaganaRataKapitalowoOdsetkowaChf:
+          description: >-
+            Format X.XXX,XX tysiące oddzielone kropką znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          maxLength: 10
+          minLength: 0
+          type: string
+        aktualnaWymaganaRataKapitalowoOdsetkowaPrzeliczonaPoKursieSrednimNbp:
+          description: >-
+            Format X.XXX,XX tysiące oddzielone kropką znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          maxLength: 10
+          minLength: 0
+          type: string
+        dataKursuNbp:
+          format: date
+          description: wybor z kalendarza. yyyy-MM-dd
+          type: string
+        wysokoscKursu:
+          description: format XX,XXXX
+          type: number
+        zalegloscWInsNieruchomosc:
+          description: ''
+          type: boolean
+        zalegloscWInsZycie:
+          description: ''
+          type: boolean
+        inneKredytyKlientaPowiazaneZIns:
+          description: ''
+          maxLength: 100
+          minLength: 0
+          type: string
+        sprawaSadowaCourtCase4:
+          description: ''
+          type: boolean
+        fwk:
+          description: ''
+          type: boolean
+        aktywnaRestrukturyzacja:
+          description: ''
+          type: boolean
+        upadloscKonsumencka:
+          description: ''
+          type: boolean
+        zgon:
+          description: ''
+          type: boolean
+        aktywnyCovid3Moratorium:
+          description: ''
+          type: boolean
+        informacjaODpd:
+          description: tylko cyfry (od 1 do 3)
+          type: string
+          pattern: '^[0-9]{1,3}$'
+        inneAktywneKredytyKlientaWChf:
+          description: ''
+          maxLength: 100
+          minLength: 0
+          type: string
+    CalculationSummary:
+      description: Kalkulacje
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        kwotaUmorzenia:
+          description: >-
+            Format X XXX,XX tysiące oddzielone spacją znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+          minimum: -99999999999999999999.9999
+          maximum: 99999999999999999999.9999
+        pozostalyKapitalDoSplatyPLN:
+          description: ''
+          type: number
+          minimum: -99999999999999999999.9999
+          maximum: 99999999999999999999.9999
+        ostatecznyTerminSplatyKredytu:
+          description: Wybor z kalendarza yyyy-MM-dd
+          format: date-time
+          type: string
+        marzaKredytu:
+          description: >-
+            Format XX,XX tysiące oddzielone kropką znaki dziesiętne oddzielone
+            przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+          minimum: -9999999999.9999
+          maximum: 9999999999.9999
+        wysokoscOprocentowaniaPierwszejRatyPoUruchomieniuZKalkulacji:
+          description: 'Wyrażone w %. Format: XX,XX znaki dziesiętne oddzielone przecinkiem'
+          type: number
+          minimum: -9999999999.9999
+          maximum: 9999999999.9999
+        wysokoscPierwszegoWIBORuZKalkulacji:
+          description: >-
+            Format XX,XX tysiące oddzielone kropką znaki dziesiętne oddzielone
+            przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+          minimum: -9999999999.9999
+          maximum: 9999999999.9999
+        wysokoscMarzyZmienneOprocentowanie:
+          description: >-
+            Format XX,XX tysiące oddzielone kropką znaki dziesiętne oddzielone
+            przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+          minimum: -9999999999.9999
+          maximum: 9999999999.9999
+        szacunkowaWysokoscOstatniejZaplaconejRatyPrzyZmiennymOprocentowaniu:
+          description: >-
+            Format X.XXX,XX tysiące oddzielone kropką znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+          minimum: -9999999999.9999
+          maximum: 9999999999.9999
+        procentowyWzrostObnizenieWysokosciRaty:
+          description: >-
+            Wyrażone w %. Format: +/- XX,XX znaki dziesiętne oddzielone
+            przecinkiem. Dopuszczony  znak specjalny opisujące spadek "-"
+          type: number
+          minimum: -99999.9999
+          maximum: 99999.9999
+        wysokoscMarzyStalaStopaProcentowa:
+          description: >-
+            Format XX,XX tysiące oddzielone kropką znaki dziesiętne oddzielone
+            przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+          minimum: -9999999999.9999
+          maximum: 9999999999.9999
+        stalaStopaProcentowa:
+          description: 'Wyrażone w %. Format: XX,XX znaki dziesiętne oddzielone przecinkiem'
+          type: number
+          minimum: -9999999999.9999
+          maximum: 9999999999.9999
+        szacunkowaWysokoscOstatniejZaplaconejRatyPrzyStalymOprocentowaniuWOstatniejRacie:
+          description: >-
+            Format X.XXX,XX tysiące oddzielone kropką znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+          minimum: -9999999999.9999
+          maximum: 9999999999.9999
+        notatka:
+          description: ''
+          maxLength: 5000
+          minLength: 0
+          type: string
+        limitNegocjacyjny:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/NegotiationLimit'
+    DecyzjaRbi:
+      description: brak kroku dodatkowej negocjacji w schemacie procesu
+      enum:
+        - POZYTYWNA
+        - NEGATYWNA
+      type: string
+    RodzajUgody:
+      description: ''
+      enum:
+        - KONTYNUACJA_ZMIENNE_OPROCENTOWANIE
+        - KONTYNUACJA_STALE_OPROCENTOWANIE
+        - SPLATA
+        - ZWROT
+      type: string
+    CalculationSummaryDecision:
+      description: Kalkulacje decyzja
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        decyzjaRbi:
+          description: brak kroku dodatkowej negocjacji w schemacie procesu
+          type: string
+          $ref: '#/components/schemas/DecyzjaRbi'
+        rodzajUgody:
+          description: ''
+          type: string
+          $ref: '#/components/schemas/RodzajUgody'
+    NegotiationLimit:
+      description: >-
+        Limit negocjacyjny w ramach kalkulacji (CalculationSummary).
+
+        Dodajac nowy limit negocjacyjny: nowa sekcja zaciągnie się z wartościami
+        z sekcji poprzedniej, jeżeli któreś pola będą wymagały korekty, zostaną
+        zmienione ręcznie
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        kwotaDoJakiejMoznaObnizycSaldoKredytu:
+          description: >-
+            Format X XXX,XX tysiące oddzielone spacją znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+          minimum: -99999999999999999999.9999
+          maximum: 99999999999999999999.9999
+        roznicaPomiedzyPozostalyKapitalDoSplatyPLNAKwotaDoJakiejMoznaObnizycSaldoKredytu:
+          description: >-
+            Format X XXX,XX tysiące oddzielone spacją znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+          minimum: -99999999999999999999.9999
+          maximum: 99999999999999999999.9999
+        marzaMinimalna:
+          description: >-
+            Format XX,XX tysiące oddzielone kropką znaki dziesiętne oddzielone
+            przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+          minimum: -9999999999.9999
+          maximum: 9999999999.9999
+        roznicaMiedzyWysokoscMarzyZmienneOprocentowanieAMarzaMinimalna:
+          description: >-
+            Format X.XXX,XX tysiące oddzielone kropką znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+          minimum: -9999999999.9999
+          maximum: 9999999999.9999
+        roznicaMiedzyWysokoscMarzyStalaStopaProcentowaAMarzaMinimalna:
+          description: >-
+            Format X.XXX,XX tysiące oddzielone kropką znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+          minimum: -9999999999.9999
+          maximum: 9999999999.9999
+        negocjacja:
+          description: ''
+          enum:
+            - MARZA
+            - KWOTA
+            - INNE
+          type: string
+        dodatkoweUzgodnienia:
+          description: ''
+          maxLength: 1000
+          minLength: 0
+          type: string
+        saldoKapitaluPoUgodzie:
+          description: >-
+            Format X.XXX,XX tysiące oddzielone kropką znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+          minimum: -99999999999999999999.9999
+          maximum: 99999999999999999999.9999
+        marzaPP:
+          description: >-
+            Format XX,XX tysiące oddzielone kropką znaki dziesiętne oddzielone
+            przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+          minimum: -9999999999.9999
+          maximum: 9999999999.9999
+        inne:
+          description: ''
+          maxLength: 1000
+          minLength: 0
+          type: string
+        dataUzytkownika:
+          format: date-time
+          description: >-
+            uzupełnione automatycznie datą bieżącą po wyborze jakiejkolwiek
+            wartości w polu decyzja
+          type: string
+        decyzjaRbi:
+          description: brak kroku dodatkowej negocjacji w schemacie procesu
+          type: string
+          $ref: '#/components/schemas/DecyzjaRbi'
+        rodzajUgody:
+          description: ''
+          type: string
+          $ref: '#/components/schemas/RodzajUgody'
+    CourtHearingMeeting:
+      description: Terminy spotkan w sadzie
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        godzinaSpotkania:
+          description: HH:mm
+          type: string
+          pattern: '^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$'
+        uczestnicy:
+          description: >-
+            pole wyboru ze zdefiniowanej listy, a jesli tos nie wybierze niczego
+            z listy moze dodac dowolny tekst recznie. zdefiniowana lista powinna
+            być pobierana z encji dane kredytobiorców, pole "Nazwa", z encji
+            "pełnomocnik banku" z pól "Imię" oraz "Nazwisko" oraz z encji
+            "Mediator" z pól "Imię" oraz "Nazwisko"
+          maxLength: 500
+          minLength: 0
+          type: array
+          items:
+            type: string
+        dataSpotkania:
+          format: date
+          description: wybor z kalendarza yyyy-MM-dd
+          type: string
+    OrganizationAttorney:
+      description: Pelnomocnik banku
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        imieINazwisko1:
+          description: >-
+            pole wyboru ze zdefiniowanej listy oraz wolne pole tekstowe o nazwie
+            'inne:' do wpisania informacji ręcznie.
+
+            zdefiniowana lista powinna być pobierana z biblioteki danych
+            trzmanych na backendzie w Mediatorze
+          maxLength: 100
+          minLength: 0
+          type: string
+        imieINazwisko2:
+          description: >-
+            informacje zaciągałyby się automatycznie z biblioteki pełnomocników
+            po wyborze pełnomocnika z listy wyboru w polu powyżej
+          maxLength: 150
+          minLength: 0
+          type: string
+        numerTelefonuKmorkowy:
+          description: tylko cyfry
+          type: string
+          pattern: '^\+[0-9]{1,6} [0-9]{3,14}$'
+        adresMailowy:
+          description: ''
+          maxLength: 50
+          minLength: 0
+          type: string
+          pattern: '(^$)|(^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$)'
+    CaseMediator:
+      description: Mediator KNF w sprawie
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        mediatorImie:
+          description: ''
+          maxLength: 50
+          minLength: 0
+          type: string
+        mediatorNazwisko:
+          description: ''
+          maxLength: 100
+          minLength: 0
+          type: string
+        numerTelefonuKomorkowy:
+          description: ''
+          type: string
+          pattern: '^\+[0-9]{1,6} [0-9]{3,14}$'
+        adresMailowy:
+          description: ''
+          type: string
+          pattern: '(^$)|(^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$)'
+        knfMediatorId:
+          description: identyfikator KNF Mediatora
+          type: integer
+          format: int64
+    KnfMediator:
+      description: Mediator KNF
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        identyfikatorKnf:
+          description: ''
+          type: string
+        imie:
+          description: ''
+          type: string
+        nazwisko:
+          description: ''
+          type: string
+        status:
+          description: ''
+          type: string
+        dostepnyOd:
+          format: date
+          description: yyyy-MM-dd
+          type: string
+        dostepnyDo:
+          format: date
+          description: yyyy-MM-dd
+          type: string
+    KNFData:
+      description: Dane KNF
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        sygnaturaSprawy:
+          description: ''
+          maxLength: 20
+          minLength: 0
+          type: string
+        technicznyIdentyfikatorSprawyWKnf:
+          description: confirmationId
+          maxLength: 100
+          minLength: 0
+          type: string
+        dataPrzekazaniaUmowyDoKnf:
+          format: date
+          description: yyyy-MM-dd
+          type: string
+    MediationOutcome:
+      description: Wynik mediacji
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        decyzjaKlienta:
+          description: ''
+          enum:
+            - POZYTYWNA
+            - NEGATYWNA
+          type: string
+        rodzajUgody:
+          description: ''
+          enum:
+            - KONTYNUACJA_ZMIENNE_OPROCENTOWANIE
+            - KONTYNUACJA_STALE_OPROCENTOWANIE
+            - SPLATA
+            - ZWROT
+          type: string
+        wynegocjowaneWarunki:
+          description: ''
+          maxLength: 1000
+          minLength: 0
+          type: boolean
+        wynegocjowanaKwotaDoSplaty:
+          description: >-
+            Tylko cyfry. Format X XXX,XX tysiące oddzielone spacją znaki
+            dziesiętne oddzielone przecinkiem. Możliwe tylko dwa miejsca po
+            przecinku
+          type: number
+        wynegocjowanaMarza:
+          description: >-
+            Format XX,XX tysiące oddzielone kropką znaki dziesiętne oddzielone
+            przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          maxLength: 10
+          minLength: 0
+          type: string
+        dataPrzekazaniaDecyzjiPozytywnej:
+          format: date
+          description: wybor z kalendarza. yyyy-MM-dd
+          type: string
+        dataPrzekazaniaDecyzjiNegatywnej:
+          format: date-time
+          description: 'Date when agreement was negative'
+          type: string
+    FinalizationParameters:
+      description: Parametry koncowe
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        outstandingBalanceBeforeSettlementInCHF:
+          description: >-
+            Format X.XXX,XX tysiące oddzielone kropką znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          maxLength: 20
+          minLength: 0
+          type: string
+        outstandingBalanceBeforeSettlementInPLN:
+          description: >-
+            Format X.XXX,XX tysiące oddzielone kropką znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          maxLength: 20
+          minLength: 0
+          type: string
+        outstandingBalanceAfterTheSettlementInPLN:
+          description: >-
+            Format X.XXX,XX tysiące oddzielone kropką znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          maxLength: 20
+          minLength: 0
+          type: string
+        amountWO:
+          description: >-
+            Format X.XXX,XX tysiące oddzielone kropką znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          maxLength: 20
+          minLength: 0
+          type: string
+        percentageWO:
+          description: >-
+            Format XX,XX tysiące oddzielone kropką znaki dziesiętne oddzielone
+            przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          maxLength: 10
+          minLength: 0
+          type: string
+        riskGroup:
+          description: ''
+          enum:
+            - HIGH_RISK
+            - MEDIUM_RISK
+            - LOW_RISK
+            - VERY_LOW_RISK
+          type: string
+        kursNBP:
+          description: >-
+            Format XX,XX tysiące oddzielone kropką znaki dziesiętne oddzielone
+            przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          maxLength: 10
+          minLength: 0
+          type: string
+        dataKursuNBP:
+          format: date
+          description: mozliwosc wyboru z kalendarza. yyyy-MM-dd
+          type: string
+    AttachmentBinary:
+      description: >-
+        Placeholder for REST API design purposes only - represents binary
+        content of the attachment
+      type: object
+    Attachment:
+      description: >-
+        Zalacznik do sprawy one-pager i inne. Moze zostac zaloczony tylko JEDEN
+        one pager
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        organisationId:
+          description: ''
+          maxLength: 100
+          minLength: 0
+          type: string
+        uploadFileName:
+          description: ''
+          maxLength: 100
+          minLength: 0
+          type: string
+        fileSizeBytes:
+          description: ''
+          type: integer
+          format: int64
+        extension:
+          description: ''
+          maxLength: 1000
+          minLength: 0
+          type: string
+        internalFileName:
+          description: ''
+          maxLength: 100
+          minLength: 0
+          type: string
+        internalURI:
+          description: ''
+          maxLength: 1000
+          minLength: 0
+          type: string
+        description:
+          description: ''
+          maxLength: 1000
+          minLength: 0
+          type: string
+        uploadDate:
+          format: date-time
+          description: yyyy-MM-dd HH:mm:ss
+          type: string
+        attachmentType:
+          description: ''
+          enum:
+            - ONE_PAGER
+            - OTHER
+            - UMOWA
+            - HARMONOGRAM
+            - ANEKS
+            - UGODA
+            - INNE
+          type: string
+        knfExportDate:
+          format: date-time
+          description: 'date-time of send attachment to knf'
+          type: string
+        deleted:
+          type: boolean
+    Note:
+      description: Notatka
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        notatki:
+          description: ''
+          minLength: 0
+          type: string
+        dataDodania:
+          format: date-time
+          description: yyyy-MM-dd HH:ss
+          type: string
+        authorUiName:
+          description: >-
+            Imie i nazwisko autora komentarza jesli edytowal rowniez superuser w
+            nawiasie takze imie i nazwisko superusera ktory modyfikowal wpis
+          maxLength: 100
+          type: string
+        section:
+          description: ''
+          type: string
+          $ref: '#/components/schemas/NoteSectionEnum'
+    CaseDataBrief:
+      description: Encja wykorzystywana do listowania spraw na Lista Spraw
+      type: object
+      properties:
+        przypisanyUzytkownik:
+          description: ''
+          type: string
+        caseId:
+          description: ''
+          type: integer
+          format: int64
+        numerSprawy:
+          description: ''
+          type: string
+        numerTelefonuKomorkowy:
+          description: ''
+          type: string
+          pattern: '^\+[0-9]{1,6} [0-9]{3,14}$'
+        numerTelefonuSluzbowy:
+          description: ''
+          type: string
+          pattern: '^\+[0-9]{1,6} [0-9]{3,14}$'
+        numerTelefonuDomowy:
+          description: ''
+          type: string
+          pattern: '^\+[0-9]{1,6} [0-9]{3,14}$'
+        numerKontraktu:
+          description: ''
+          type: string
+        numerUmowy:
+          description: ''
+          type: string
+        idKlienta:
+          description: ''
+          type: string
+        typSprawy:
+          description: ''
+          enum:
+            - MEDIACJE
+          type: string
+        sygnaturaSprawy:
+          description: ''
+          type: string
+        pesel:
+          description: ''
+          type: string
+        regon:
+          description: ''
+          type: string
+        statusTechniczny:
+          description: UI friendly technical status name
+          type: string
+        etapProcesu:
+          description: UI friendly etap name
+          type: string
+        dataRejestracji:
+          format: date-time
+          description: yyyy-MM-dd HH:mm:ss
+          type: string
+        dataWyslaniaOnePagera:
+          format: date-time
+          description: yyyy-MM-dd HH:mm:ss
+          type: string
+        dataOdeslaniaDokumentow:
+          format: date-time
+          description: yyyy-MM-dd HH:mm:ss
+          type: string
+        dataSpotkania:
+          format: date-time
+          description: yyyy-MM-dd HH:mm:ss
+          type: string
+        nazwiskoImieILiczba:
+          description: >-
+            Pole jak najwczesniej w tabeli na UI jako kolumna, Imie i nazwisko
+            glownego kredytobiorcy (oznaczony flaga boolean). jesli jest wiecej
+            kredytobiorcow, to pozniej pozniej w nawiiasie liczba pozostalych
+            kredytobiorcow np (+2) jesli jest jeszcze 2 kredytobiorcow. Jesli
+            nie jest ustawiony glowny kredytobiorca - pokazywac pierwszego
+            kredytobiorce sortujac najpierw po imieniu a pozniej po nazwisku w
+            liscie i pokazac pierwsza osoba np Aleksandra Allowska (+2)
+          type: string
+        kredytobiorcaImie:
+          description: przedostatnie pole w tabeli na liscie
+          type: string
+        kredytobiorcaNazwisko:
+          description: ostatnie pole w tabeli na liscie
+          type: string
+        nazwaFirmy:
+          description: ''
+          type: string
+        dataAktualizacjiStatusu:
+          format: date-time
+          description: Represents the date-time when state KOMPLETNY was sent to KNF
+          type: string
+    Dictionary:
+      description: Pojedynczy slownik systemowy ze stalymi
+      type: object
+      properties:
+        id:
+          description: ''
+          type: integer
+          format: int64
+        name:
+          description: ''
+          type: string
+        version:
+          description: ''
+          type: integer
+        dataDate:
+          format: date-time
+          description: ''
+          type: string
+        values:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelValue'
+    DocumentationData:
+      description: Dokumentacja
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        dataWaznosciDecyzji:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        statusDecyzji:
+          description: Status decyzji
+          type: string
+        warunkiDecyzji:
+          description: Warunki decyzji
+          type: string
+        dataWplywuUmowyMediacyjnej:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        kompletnoscUmowyMediacyjnej:
+          description: Kompletność umowy mediacyjnej
+          type: boolean
+        numerDyspozycji:
+          description: Numer dyspozycji
+          maxLength: 50
+          type: string
+        dataWysylkiUmowyMediacyjnejDoKnf:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        wymaganaDataPrzygotowaniaKalkulacjiPrzedMediacja:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        dataKalkulacjiPrzedMediacja:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        wymaganaDataPrzygotowaniaDokumentacjiPrzedMediacja:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        dataPrzygotowaniaDokumentowDoMediacji:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        dataPrzekazaniaDokumentacjiDoKnfKlientaPelnomocnika:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        dataPozytywnegoWynikuMediacji:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        dataPrzygotowaniaOstatecznejKalkulacji:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        dataPrzygotowaniaOstatecznejDokumentacji:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        dataWysylkiDokumentowKurierem:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        dataWysylkiDokumentowRNet:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        dataKoniecznegoPrzypomnieniaOZwrocieDokumentow:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        dataOtrzymaniaPodpisanychDokumentow:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        czyDokumentyKompletne:
+          description: Czy dokumenty kompletne
+          type: boolean
+        planowanaDataRealizacji:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        dataRealizacjiWSystemie:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        dataOdeslaniaUmowyDoKnf:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        dataOdeslaniaUmowyDoKlienta:
+          format: date
+          description: YYYY-MM-DD
+          type: string
+        czyKlientPodpisalOswiadczeniePit:
+          description: Czy klient podpisal oswiadczenie PIT
+          type: boolean
+        dataZawarciaUgody:
+          format: date-time
+          description: 'Date when agreement was signed'
+          type: string
+    CreditDecision:
+      description: Decyzja kredytowa
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        przypisanyUzytkownik:
+          $ref: '#/components/schemas/LabelValue'
+          description: label - name, value - userId
+        idKlienta:
+          description: id klienta w systemach organizacji - nie w Mediatorze
+          maxLength: 15
+          minLength: 0
+          type: string
+        numerKontraktu:
+          description: ''
+          maxLength: 255
+          minLength: 0
+          type: string
+        numerSprawy:
+          description: >-
+            Unikalny numer dyspozycji. ID klucz złożony (human readable) - nr
+            kontraktu_data rejstracji_numer kolejny sekwencji
+          maxLength: 300
+          minLength: 0
+          type: string
+        pozostalyKapitalDoSplatyPLN:
+          description: ''
+          maxLength: 20
+          minLength: 0
+          type: string
+        kwotaUmorzenia:
+          description: >-
+            Format X XXX,XX tysiące oddzielone spacją znaki dziesiętne
+            oddzielone przecinkiem. Możliwe tylko dwa miejsca po przecinku
+          type: number
+        ostatecznyTerminSplatyKredytu:
+          description: Wybor z kalendarza yyyy-MM-dd
+          format: date-time
+          type: string
+        marzaKredytu:
+          description: >-
+            Wyrażone w %. Format: +/- XX,XX znaki dziesiętne oddzielone
+            przecinkiem. Dopuszczony  znak specjalny opisujące spadek "-"
+          type: number
+          minimum: -99999999.9999
+          maximum: 99999999.9999
+        wysokoscOprocentowaniaPierwszejRatyPoUruchomieniu:
+          description: >-
+            Wyrażone w %. Format: +/- XX,XX znaki dziesiętne oddzielone
+            przecinkiem. Dopuszczony  znak specjalny opisujące spadek "-"
+          type: number
+          minimum: -99999999.9999
+          maximum: 99999999.9999
+        wysokoscPierwszegoWIBORuZKalkulacji:
+          description: >-
+            Wyrażone w %. Format: +/- XX,XX znaki dziesiętne oddzielone
+            przecinkiem. Dopuszczony  znak specjalny opisujące spadek "-"
+          type: number
+          minimum: -99999999.9999
+          maximum: 99999999.9999
+        wysokoscMarzyZmienneOprocentowanie:
+          description: >-
+            Wyrażone w %. Format: +/- XX,XX znaki dziesiętne oddzielone
+            przecinkiem. Dopuszczony  znak specjalny opisujące spadek "-"
+          type: number
+          minimum: -99999999.9999
+          maximum: 99999999.9999
+        szacunkowaWysokoscOstatniejZaplaconejRatyPrzyZmiennymOprocentowaniu:
+          description: >-
+            Wyrażone w %. Format: +/- XX,XX znaki dziesiętne oddzielone
+            przecinkiem. Dopuszczony  znak specjalny opisujące spadek "-"
+          type: number
+          minimum: -99999999.9999
+          maximum: 99999999.9999
+        procentowyWzrostObnizenieWysokosciRaty:
+          description: >-
+            Wyrażone w %. Format: +/- XX,XX znaki dziesiętne oddzielone
+            przecinkiem. Dopuszczony  znak specjalny opisujące spadek "-"
+          type: number
+          minimum: -99999.9999
+          maximum: 99999.9999
+        wysokoscMarzyStalaStopaProcentowa:
+          description: >-
+            Wyrażone w %. Format: +/- XX,XX znaki dziesiętne oddzielone
+            przecinkiem. Dopuszczony  znak specjalny opisujące spadek "-"
+          type: number
+          minimum: -99999999.9999
+          maximum: 99999999.9999
+        stalaStopaProcentowa:
+          description: >-
+            Wyrażone w %. Format: +/- XX,XX znaki dziesiętne oddzielone
+            przecinkiem. Dopuszczony  znak specjalny opisujące spadek "-"
+          type: number
+          minimum: -99999999.9999
+          maximum: 99999999.9999
+        szacunkowaWysokoscOstatniejZaplaconejRatyPrzyStalymOprocentowaniuWOstatniejRacie:
+          description: >-
+            Wyrażone w %. Format: +/- XX,XX znaki dziesiętne oddzielone
+            przecinkiem. Dopuszczony  znak specjalny opisujące spadek "-"
+          type: number
+          minimum: -99999999.9999
+          maximum: 99999999.9999
+        creditDecisionEvents:
+          description: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditDecisionEvent'
+    CreditDecisionEvent:
+      description: Decyzja kredytowa wydarzenie
+      type: object
+      properties:
+        id:
+          description: identyfikator wewnetrzny Mediator
+          type: integer
+          format: int64
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        creditDecisionId:
+          description: identyfikator decyzji kredytowej wewnatrz Mediator
+          type: integer
+          format: int64
+        dataDecyzji:
+          description: Wybor z kalendarza yyyy-MM-dd
+          format: date-time
+          type: string
+        dataWaznosciDecyzji:
+          description: Wybor z kalendarza yyyy-MM-dd
+          format: date-time
+          type: string
+        statusDecyzji:
+          description: status decyzji
+          enum:
+            - POZYTYWNA
+            - NEGATYWNA
+            - BBF
+          type: string
+        warunkiDecyzji:
+          type: string
+          description: ''
+          minLength: 0
+          maxLength: 5000
+    StatusResponse:
+      description: Status Response
+      type: object
+      properties:
+        status:
+          description: status odpowiedzi
+          type: string
+    Person:
+      description: ''
+      type: object
+      properties:
+        fullName:
+          description: first name with last name
+          type: string
+    NoteSectionEnum:
+      description: ''
+      type: string
+      nullable: true
+      enum:
+        - CASE_DATA
+        - CLIENT_DATA
+        - CLIENT_INTERACTION_SUMMARY
+        - CLIENT_INTERACTION_EVENT
+        - CREDIT_DATA
+        - CALCULATION_SUMMARY
+        - COURT_HEARING_MEETING
+        - ORGANIZATION_ATTORNEY
+        - CASE_MEDIATOR
+        - KNF_DATA
+        - MEDIATION_OUTCOME
+        - FINALIZATION_PARAMETERS
+        - DOCUMENTATION
+        - CREDIT_DECISION_EVENT
+        - CREDIT_DECISION
+        - null
+    WynikUgody:
+      required:
+        - rodzajUgody
+      properties:
+        rodzajUgody:
+          $ref: '#/components/schemas/RodzajUgodyKnf'
+        dataZawarcia:
+          type: string
+          format: date-time
+    RodzajUgodyKnf:
+      type: string
+      enum:
+        - UGODA_TAK_M
+        - UGODA_TAK_E
+        - UGODA_NIE
+        - WZNOWIENIE
+    KnfOperationTypeEnum:
+      description: 'Operation type tbd in KNF'
+      type: string
+      enum:
+        - UPDATE_ATTORNEY
+        - SEND_POSITIVE_AGREEMENT
+        - SEND_NEGATIVE_AGREEMENT
+        - UPDATE_CASE_STATE
+        - CLOSE_CASE
+        - SEND_ATTACHMENTS
+        - REGISTER_CASE
+        - DOWNLOAD_PROTOCOL
+    KnfHistoryOperation:
+      description: 'Describe operation done in KNF'
+      type: object
+      properties:
+        caseId:
+          description: identyfikator sprawy wewnatrz Mediator
+          type: integer
+          format: int64
+        createDate:
+          format: date-time
+          description: yyyy-MM-dd HH:mm:ss
+          type: string
+        creatorId:
+          type: string
+        type:
+          $ref: '#/components/schemas/KnfOperationTypeEnum'
+        dataIn:
+          type: object
+        dataOut:
+          type: object
+    EtapProcesu:
+      description: 'Represents case state'
+      type: string
+      enum:
+        - NOWA
+        - W_ANALIZIE
+        - PO_DECYZJI
+        - DO_KONTAKTU_Z_KLIENTEM
+        - DECYZJA_NEGATYWNA_RYZYKA
+        - OCZEKUJE_NA_UMOWE_MEDIACYJNA
+        - BRAK_KONTAKTU
+        - ODMOWA_MEDIACJI
+        - ZAREJESTROWANA_W_KNF
+        - OCZEKUJE_NA_MEDIACJE_KALKULACJA
+        - OCZEKUJE_NA_MEDIACJE_DOKUMENTACJA
+        - OCZEKUJE_NA_MEDIACJE
+        - MEDIACJE
+        - DECYZJA_NEGOCJACYJNA_RBI
+        - OCZEKUJE_NA_KOLEJNE_SPOTKANIE
+        - BRAK_POROZUMIENIA
+        - MEDIACJA_ZAKONCZONA_NEGATYWNIE
+        - PRZYGOTOWYWANIE_UGODY_REKALKULACJA
+        - REZYGNACJA_KLIENTA_PO_MEDIACJI
+        - PRZYGOTOWYWANIE_UGODY
+        - DOKUMENTY_WYSLANE
+        - DOKUMENTY_OTRZYMANE
+        - DOKUMENTY_NIEKOMPLETNE
+        - DOKUMENTY_OTRZYMANE_KOMPLETNE
+        - DOKUMENTY_OTRZYMANE_DO_REKALKULACJI
+        - OCZEKUJE_NA_REALIZACJE
+        - UGODA_URUCHOMIONA_W_SYSTEMIE
+        - UGODA_URUCHOMIONA_W_SYSTEMIE_KONIEC_PROCESU
+        - BRAK_SPELNIENIA_WARUNKOW_PO_MEDIACJI
+        - ANULOWANA
+    ReopenCaseHistory:
+      description: 'Represent reopen case history'
+      type: object
+      properties:
+        closeDate:
+          description: data zamkniecia sprawy
+          type: string
+          format: date-time
+        oldCaseId:
+          description: id starej sprawy
+          type: integer
+          format: int 64
+
